@@ -52,7 +52,7 @@ export default function Register() {
       toast.success("Cont creat cu succes", {
         description: "Te poți autentifica acum",
       });
-      navigate(`/auth/login`);
+      navigate(`/login`);
     } catch (error: any) {
       toast.error("Eroare", {
         description: error.response?.data?.message || "A apărut o eroare la înregistrare",

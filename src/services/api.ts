@@ -9,6 +9,12 @@ const api = axios.create({
   },
 });
 
+// User
+export const getUserProfile = async() => {
+  const response = await api.get("/auth/user"); 
+  return response.data; // -> UserResponseDto
+}
+
 // Cars
 export interface CarFilters {
   search?: string;

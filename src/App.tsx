@@ -20,6 +20,7 @@ import CookiesPolicy from "./pages/cookies/Cookies";
 import Contact from "./pages/contact/Contact";
 import Cars from "./pages/cars/Cars";
 import CarDetails from "./pages/cars/CarDetails";
+import Profile from "./pages/profile/Profile";
 
 function App() {
   const isAuthenticated = checkAuth(); // folosim auth.ts
@@ -40,6 +41,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/cars" element={<Cars />} />
           <Route path="/cars/:id" element={<CarDetails />} />
+          <Route path="/profile" element={<Profile />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
