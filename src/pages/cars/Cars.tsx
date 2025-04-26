@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { checkAuth } from "@/services/auth";
+import { BASE_PATH } from "@/lib/constant";
 
 const locations = ["București", "Cluj-Napoca", "Timișoara", "Iași", "Brașov", "Constanța"];
 const transmissions = ["AUTOMATIC", "MANUAL"];
@@ -49,10 +50,10 @@ export default function Cars() {
 
   const handleCarClick = (carId: string) => {
     if (!isAuthenticated) {
-      navigate(`/login`);
+      navigate(`${BASE_PATH}/login`);
       return;
     }
-    navigate(`/cars/${carId}`);
+    navigate(`${BASE_PATH}/cars/${carId}`);
   };
 
   if (error) {

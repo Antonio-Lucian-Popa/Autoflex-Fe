@@ -1,3 +1,4 @@
+import { BASE_PATH } from "@/lib/constant";
 import { JSX } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -8,7 +9,7 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children, isAuthenticated }: ProtectedRouteProps) => {
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={`${BASE_PATH}/login`} replace />;
   }
   return children;
 };

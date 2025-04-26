@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { register } from "@/services/auth"; // <- corect importat pentru React
 import { Car } from "lucide-react";
+import { BASE_PATH } from "@/lib/constant";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function Register() {
       toast.success("Cont creat cu succes", {
         description: "Te poți autentifica acum",
       });
-      navigate(`/login`);
+      navigate(`${BASE_PATH}/login`);
     } catch (error: any) {
       toast.error("Eroare", {
         description: error.response?.data?.message || "A apărut o eroare la înregistrare",

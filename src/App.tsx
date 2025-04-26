@@ -21,12 +21,13 @@ import Contact from "./pages/contact/Contact";
 import Cars from "./pages/cars/Cars";
 import CarDetails from "./pages/cars/CarDetails";
 import Profile from "./pages/profile/Profile";
+import { BASE_PATH } from "./lib/constant";
 
 function App() {
   const isAuthenticated = checkAuth(); // folosim auth.ts
 
   return (
-    <Router>
+    <Router basename={BASE_PATH}>
       <Navbar />
       <main className="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <Routes>
