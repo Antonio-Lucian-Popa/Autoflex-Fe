@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout, checkAuth } from "@/services/auth"; // schimbat corect
-import { BASE_PATH } from "@/lib/constant";
+
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -28,15 +28,15 @@ export function Navbar() {
   const handleLogout = () => {
     logout();
     queryClient.setQueryData(['auth'], false);
-    navigate(`${BASE_PATH}/`);
+    navigate(`/`);
   };
 
   const handleAuthenticatedLink = (path: string) => {
     if (!isAuthenticated) {
-      navigate(`${BASE_PATH}/login`);
+      navigate(`/login`);
       return;
     }
-    navigate(`${BASE_PATH}/${path}`);
+    navigate(`/${path}`);
   };
 
   return (
@@ -115,7 +115,7 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent>
-              <div className="flex flex-col gap-4 mt-8">
+              <div className="flex flex-col gap-4 mt-8 px-4">
                 <Link to="/cars" onClick={() => setIsOpen(false)}>
                   Caută mașini
                 </Link>

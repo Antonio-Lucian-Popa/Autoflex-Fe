@@ -10,7 +10,6 @@ import { Car } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import { login } from "@/services/auth";
-import { BASE_PATH } from "@/lib/constant";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ export default function LoginPage() {
       toast.success("Autentificare reușită", {
         description: "Bine ai revenit!",
       });
-      navigate(`${BASE_PATH}/profile`);
+      navigate(`/profile`);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error("Eroare la autentificare", {

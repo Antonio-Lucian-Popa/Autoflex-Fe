@@ -9,7 +9,6 @@ import { ImagePlus, Trash2, Loader2 } from "lucide-react";
 import { InputField } from "@/components/common/InputField";
 import { SelectField } from "@/components/common/SelectField";
 import { TextareaField } from "@/components/common/TextareaField";
-import { BASE_PATH } from "@/lib/constant";
 
 export default function Offer() {
   const navigate = useNavigate();
@@ -64,7 +63,7 @@ export default function Offer() {
       });
 
       setTimeout(() => {
-        navigate(`${BASE_PATH}/profile/cars`);
+        navigate(`/profile/cars`);
       }, 3000);
 
       setFormData({

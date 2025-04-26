@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BASE_PATH } from "@/lib/constant";
 import { getUserBookings, getUserProfile } from "@/services/api";
 
 import { useQuery } from "@tanstack/react-query";
@@ -106,7 +105,7 @@ export default function Profile() {
             <p className="text-muted-foreground mb-4">
               Începe să câștigi bani oferind mașina ta spre închiriere
             </p>
-            <Button onClick={() => navigate(`${BASE_PATH}/offer`)}>
+            <Button onClick={() => navigate(`/offer`)}>
               Adaugă o mașină
             </Button>
           </div>

@@ -4,13 +4,12 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { CarFilters, getCars, getImageUrl } from "@/services/api"; // schimbat corect
+import { CarFilters, getCars } from "@/services/api"; // schimbat corect
 import { Filter, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { checkAuth } from "@/services/auth";
-import { BASE_PATH } from "@/lib/constant";
 
 const locations = ["București", "Cluj-Napoca", "Timișoara", "Iași", "Brașov", "Constanța"];
 const transmissions = ["AUTOMATIC", "MANUAL"];
@@ -50,10 +49,10 @@ export default function Cars() {
 
   const handleCarClick = (carId: string) => {
     if (!isAuthenticated) {
-      navigate(`${BASE_PATH}/login`);
+      navigate(`/login`);
       return;
     }
-    navigate(`${BASE_PATH}/cars/${carId}`);
+    navigate(`/cars/${carId}`);
   };
 
   if (error) {
@@ -217,7 +216,7 @@ export default function Cars() {
               <Card key={car.id} className="overflow-hidden group">
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={getImageUrl(car.id, car.images[0])}
+                    src={car.images[0]}
                     alt={car.name}
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   />

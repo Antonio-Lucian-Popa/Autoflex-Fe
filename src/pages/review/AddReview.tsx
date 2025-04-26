@@ -8,7 +8,6 @@ import { createReview } from "@/services/api"; // sau unde ai definit `createRev
 import { Star } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SetStateAction, useState } from "react";
-import { BASE_PATH } from "@/lib/constant";
 
 export default function AddReviewPage() {
   const { id } = useParams<{ id: string }>();
@@ -38,7 +37,7 @@ export default function AddReviewPage() {
         comment,
       });
       toast.success("Recenzie adăugată", { description: "Îți mulțumim pentru feedback!" });
-      navigate(`${BASE_PATH}/cars/${id}`);
+      navigate(`/cars/${id}`);
     } catch (error: any) {
       toast.error("Eroare", {
         description: error.response?.data?.message || "A apărut o eroare la adăugarea recenziei",
