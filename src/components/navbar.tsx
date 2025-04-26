@@ -42,7 +42,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="mx-auto max-w-[1440px] flex h-16 items-center px-4 sm:px-6 lg:px-8">
-        <Link to={`${BASE_PATH}/`} className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <Car className="h-6 w-6" />
           <span className="text-xl font-bold">AutoFlex</span>
         </Link>
@@ -50,7 +50,7 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center justify-between flex-1 pl-8">
           <div className="flex gap-6">
-            <Link to={`${BASE_PATH}/cars`} className="text-foreground/60 hover:text-foreground transition">
+            <Link to="/cars" className="text-foreground/60 hover:text-foreground transition">
               Caută mașini
             </Link>
             {isAuthenticated && (
@@ -61,7 +61,7 @@ export function Navbar() {
                 Oferă mașina ta
               </button>
             )}
-            <Link to={`${BASE_PATH}/how-it-works`} className="text-foreground/60 hover:text-foreground transition">
+            <Link to="/how-it-works" className="text-foreground/60 hover:text-foreground transition">
               Cum funcționează
             </Link>
           </div>
@@ -76,13 +76,13 @@ export function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
-                    <Link to={`${BASE_PATH}/profile`}>Profilul meu</Link>
+                    <Link to="/profile">Profilul meu</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${BASE_PATH}/profile/bookings`}>Rezervările mele</Link>
+                    <Link to="/profile/bookings">Rezervările mele</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`${BASE_PATH}/profile/cars`}>Mașinile mele</Link>
+                    <Link to="/profile/cars">Mașinile mele</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-red-600">
@@ -92,13 +92,13 @@ export function Navbar() {
               </DropdownMenu>
             ) : (
               <>
-                <Link to={`${BASE_PATH}/login`}>
+                <Link to="/login">
                   <Button variant="ghost" size="sm">
                     <LogIn className="h-4 w-4 mr-2" />
                     Autentificare
                   </Button>
                 </Link>
-                <Link to={`${BASE_PATH}/register`}>
+                <Link to="/register">
                   <Button size="sm">Înregistrare</Button>
                 </Link>
               </>
@@ -116,7 +116,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent>
               <div className="flex flex-col gap-4 mt-8">
-                <Link to={`${BASE_PATH}/cars`} onClick={() => setIsOpen(false)}>
+                <Link to="/cars" onClick={() => setIsOpen(false)}>
                   Caută mașini
                 </Link>
 
@@ -132,7 +132,7 @@ export function Navbar() {
                   </button>
                 )}
 
-                <Link to={`${BASE_PATH}/how-it-works`} onClick={() => setIsOpen(false)}>
+                <Link to="/how-it-works" onClick={() => setIsOpen(false)}>
                   Cum funcționează
                 </Link>
 
@@ -140,13 +140,13 @@ export function Navbar() {
 
                 {isAuthenticated ? (
                   <>
-                    <Link to={`${BASE_PATH}/profile`} onClick={() => setIsOpen(false)}>
+                    <Link to="/profile" onClick={() => setIsOpen(false)}>
                       Profilul meu
                     </Link>
-                    <Link to={`${BASE_PATH}/profile/bookings`} onClick={() => setIsOpen(false)}>
+                    <Link to="/profile/bookings" onClick={() => setIsOpen(false)}>
                       Rezervările mele
                     </Link>
-                    <Link to={`${BASE_PATH}/profile/cars`} onClick={() => setIsOpen(false)}>
+                    <Link to="/profile/cars" onClick={() => setIsOpen(false)}>
                       Mașinile mele
                     </Link>
                     <Button
@@ -161,13 +161,13 @@ export function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link to={`${BASE_PATH}/login`} onClick={() => setIsOpen(false)}>
+                    <Link to="/login" onClick={() => setIsOpen(false)}>
                       <Button variant="ghost" className="w-full justify-start">
                         <LogIn className="h-4 w-4 mr-2" />
                         Autentificare
                       </Button>
                     </Link>
-                    <Link to={`${BASE_PATH}/register`} onClick={() => setIsOpen(false)}>
+                    <Link to="/register" onClick={() => setIsOpen(false)}>
                       <Button className="w-full">Înregistrare</Button>
                     </Link>
                   </>
