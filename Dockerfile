@@ -8,8 +8,8 @@ COPY package*.json ./
 COPY vite.config.ts ./
 COPY .env.production ./
 
-# Instalăm dependințele
-RUN npm install
+# Instalăm dependențele ignorând conflictele de peer-deps
+RUN npm install --legacy-peer-deps
 
 # Copiem tot codul sursă
 COPY . .
@@ -28,7 +28,7 @@ RUN npm install -g serve
 # Copiem doar fișierele build-uite
 COPY --from=builder /app/dist /app/dist
 
-# Portul pe care o să servească (match la nginx proxy_pass 8083)
+# Portul pe care o să servească aplicația (match la nginx proxy_pass 8083)
 EXPOSE 8083
 
 # Comanda de start
