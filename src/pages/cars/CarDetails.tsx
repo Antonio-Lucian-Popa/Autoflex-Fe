@@ -12,6 +12,14 @@ import { JSX, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, A11y } from 'swiper/modules';
+
+// Swiper styles
+import 'swiper/swiper-bundle.css';
+import './CarDetail.css';
+
+
 export default function CarDetails() {
   const { id } = useParams<{ id: string }>();
   const { toast } = useToast();
@@ -35,12 +43,9 @@ export default function CarDetails() {
 
   const handleBooking = async () => {
     if (!dateRange?.from || !dateRange?.to) {
-      toast.error("Eroare", {
-        description: "Te rugăm să selectezi perioada de închiriere",
-      });
+      toast.error("Eroare", { description: "Te rugăm să selectezi perioada de închiriere" });
       return;
     }
-  
     setIsBooking(true);
     try {
       await createBooking({
@@ -48,42 +53,41 @@ export default function CarDetails() {
         startDate: format(dateRange.from, "yyyy-MM-dd"),
         endDate: format(dateRange.to, "yyyy-MM-dd"),
       });
-      toast.success("Rezervare creată", {
-        description: "Rezervarea ta a fost înregistrată cu succes",
-      });
+      toast.success("Rezervare creată", { description: "Rezervarea ta a fost înregistrată cu succes" });
       setDateRange(undefined);
     } catch (error: any) {
-      toast.error("Eroare", {
-        description: error.response?.data?.message || "A apărut o eroare la rezervare",
-      });
+      toast.error("Eroare", { description: error.response?.data?.message || "A apărut o eroare la rezervare" });
     } finally {
       setIsBooking(false);
     }
   };
-  
+
   const disabledDays = occupiedDates?.map((interval: any) => ({
     from: new Date(interval.startDate),
     to: new Date(interval.endDate),
   }));
-  
 
-  if (isLoadingCar) return (
-    <div className="container py-8">
-      <div className="animate-pulse">
-        <div className="h-[400px] bg-gray-200 rounded-lg mb-8" />
-        <div className="space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-4 bg-gray-200 rounded w-1/4" />
+  if (isLoadingCar) {
+    return (
+      <div className="container py-8">
+        <div className="animate-pulse">
+          <div className="h-[400px] bg-gray-200 rounded-lg mb-8" />
+          <div className="space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3" />
+            <div className="h-4 bg-gray-200 rounded w-1/4" />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 
-  if (!car) return (
-    <div className="container py-8 text-center">
-      <p className="text-red-500">Mașina nu a fost găsită.</p>
-    </div>
-  );
+  if (!car) {
+    return (
+      <div className="container py-8 text-center">
+        <p className="text-red-500">Mașina nu a fost găsită.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8">
@@ -91,25 +95,31 @@ export default function CarDetails() {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
           {/* Image Gallery */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <div className="relative h-[400px] rounded-lg overflow-hidden">
-                <img
-                  src={car.images[0]}
-                  alt={car.name}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
-            </div>
-            {car.images.slice(1).map((image: string, index: number) => (
-              <div key={index} className="relative h-[200px] rounded-lg overflow-hidden">
-                <img
-                  src={image}
-                  alt={`${car.name} ${index + 2}`}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </div>
-            ))}
+          <div className="relative">
+          <Swiper
+        modules={[Navigation, Pagination, A11y]}
+        navigation
+        pagination={{ clickable: true }}
+        spaceBetween={0}
+        scrollbar={{ draggable: true }}
+        slidesPerView={1}
+        className="w-full h-full"
+      >
+              {car.images.map((image: string, index: number) => (
+                <SwiperSlide key={index}>
+                 <div className="relative w-full pt-[66.66%]"> {/* 16:9 aspect ratio */}
+                  <img
+                    src={image}
+                    alt={`Image ${index}`}
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+
+                </SwiperSlide>
+              ))}
+
+              
+            </Swiper>
           </div>
 
           {/* Car Details */}
@@ -133,7 +143,7 @@ export default function CarDetails() {
 
             <Separator className="my-6" />
 
-            {/* Specs */}
+            {/* Specifications */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               <Spec icon={<Car />} label="An fabricație" value={car.year} />
               <Spec icon={<Gauge />} label="Putere" value={car.power} />
@@ -190,7 +200,9 @@ export default function CarDetails() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{car.owner.firstName} {car.owner.lastName}</p>
-                    <p className="text-sm text-muted-foreground">Membru din {format(new Date(car.owner.createdAt), "MMMM yyyy")}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Membru din {format(new Date(car.owner.createdAt), "MMMM yyyy")}
+                    </p>
                   </div>
                   <div className="flex items-center">
                     <Star className="h-4 w-4 text-yellow-400 mr-1" />
@@ -212,7 +224,7 @@ export default function CarDetails() {
                     { before: new Date() },
                     ...(disabledDays || []),
                   ]}
-                  className="rounded-md border"
+                  className="rounded-md border w-full"
                 />
               </div>
 
