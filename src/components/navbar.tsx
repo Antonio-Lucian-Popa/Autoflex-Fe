@@ -22,8 +22,8 @@ export function Navbar() {
   const { data: isAuthenticated } = useQuery({
     queryKey: ['auth'],
     queryFn: checkAuth,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+    staleTime: 1000 * 60 * 5,
+  });  
 
   const handleLogout = () => {
     logout();
@@ -31,13 +31,7 @@ export function Navbar() {
     navigate(`/`);
   };
 
-  const handleAuthenticatedLink = (path: string) => {
-    if (!isAuthenticated) {
-      navigate(`/login`);
-      return;
-    }
-    navigate(`/${path}`);
-  };
+  
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -54,13 +48,11 @@ export function Navbar() {
               Caută mașini
             </Link>
             {isAuthenticated && (
-              <button
-                onClick={() => handleAuthenticatedLink("offer")}
-                className="text-foreground/60 hover:text-foreground transition"
-              >
-                Oferă mașina ta
-              </button>
+              <Link to="/offer" className="text-foreground/60 hover:text-foreground transition">
+              Oferă mașina ta
+            </Link>
             )}
+
             <Link to="/how-it-works" className="text-foreground/60 hover:text-foreground transition">
               Cum funcționează
             </Link>
@@ -121,16 +113,11 @@ export function Navbar() {
                 </Link>
 
                 {isAuthenticated && (
-                  <button
-                    onClick={() => {
-                      handleAuthenticatedLink("offer");
-                      setIsOpen(false);
-                    }}
-                    className="text-left"
-                  >
+                  <Link to="/offer" className="text-foreground/60 hover:text-foreground transition">
                     Oferă mașina ta
-                  </button>
+                  </Link>
                 )}
+
 
                 <Link to="/how-it-works" onClick={() => setIsOpen(false)}>
                   Cum funcționează

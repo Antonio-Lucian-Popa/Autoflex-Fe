@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { CarFilters, getCars } from "@/services/api"; // schimbat corect
+import { CarFilters, getCars } from "@/services/api";
 import { Filter, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -15,14 +15,18 @@ const locations = ["București", "Cluj-Napoca", "Timișoara", "Iași", "Brașov"
 const transmissions = ["AUTOMATIC", "MANUAL"];
 const fuels = ["GASOLINE", "DIESEL", "ELECTRIC", "HYBRID"];
 
+const defaultFilters: CarFilters = {
+  page: 0,
+  size: 9,
+  minPrice: 0,
+  maxPrice: 500,
+  sortBy: "price",
+  direction: "asc",
+};
+
 export default function Cars() {
   const navigate = useNavigate();
-  const [filters, setFilters] = useState<CarFilters>({
-    page: 0,
-    size: 9,
-    minPrice: 0,
-    maxPrice: 500,
-  });
+  const [filters, setFilters] = useState<CarFilters>(defaultFilters);
 
   const { data: isAuthenticated } = useQuery({
     queryKey: ['auth'],
@@ -36,11 +40,11 @@ export default function Cars() {
   });
 
   const handleFilterChange = (key: keyof CarFilters, value: any) => {
-    setFilters((prev: any) => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const handlePriceChange = (value: number[]) => {
-    setFilters((prev: any) => ({
+    setFilters((prev) => ({
       ...prev,
       minPrice: value[0],
       maxPrice: value[1],
@@ -78,29 +82,26 @@ export default function Cars() {
               {/* Price Range */}
               <div>
                 <label className="text-sm font-medium mb-2 block">Preț pe zi (RON)</label>
-                <div className="space-y-4">
-                  <Slider
-                    value={[filters.minPrice || 0, filters.maxPrice || 500]}
-                    max={500}
-                    step={10}
-                    onValueChange={handlePriceChange}
-                    className="mt-2"
+                <Slider
+                  value={[filters.minPrice ?? 0, filters.maxPrice ?? 500]}
+                  max={500}
+                  step={10}
+                  onValueChange={handlePriceChange}
+                />
+                <div className="flex items-center justify-between mt-2">
+                  <Input
+                    type="number"
+                    value={filters.minPrice}
+                    onChange={(e) => handleFilterChange("minPrice", Number(e.target.value))}
+                    className="w-20"
                   />
-                  <div className="flex items-center justify-between">
-                    <Input
-                      type="number"
-                      value={filters.minPrice}
-                      onChange={(e) => handleFilterChange("minPrice", Number(e.target.value))}
-                      className="w-20"
-                    />
-                    <span className="text-muted-foreground">-</span>
-                    <Input
-                      type="number"
-                      value={filters.maxPrice}
-                      onChange={(e) => handleFilterChange("maxPrice", Number(e.target.value))}
-                      className="w-20"
-                    />
-                  </div>
+                  <span className="text-muted-foreground">-</span>
+                  <Input
+                    type="number"
+                    value={filters.maxPrice}
+                    onChange={(e) => handleFilterChange("maxPrice", Number(e.target.value))}
+                    className="w-20"
+                  />
                 </div>
               </div>
 
@@ -108,10 +109,10 @@ export default function Cars() {
               <div>
                 <label className="text-sm font-medium mb-2 block">Locație</label>
                 <Select
-                  value={filters.location}
+                  value={filters.location ?? ""}
                   onValueChange={(value) => handleFilterChange("location", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Alege orașul" />
                   </SelectTrigger>
                   <SelectContent>
@@ -128,10 +129,10 @@ export default function Cars() {
               <div>
                 <label className="text-sm font-medium mb-2 block">Cutie de viteze</label>
                 <Select
-                  value={filters.transmission}
+                  value={filters.transmission ?? ""}
                   onValueChange={(value) => handleFilterChange("transmission", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Alege tipul" />
                   </SelectTrigger>
                   <SelectContent>
@@ -148,10 +149,10 @@ export default function Cars() {
               <div>
                 <label className="text-sm font-medium mb-2 block">Combustibil</label>
                 <Select
-                  value={filters.fuelType}
+                  value={filters.fuelType ?? ""}
                   onValueChange={(value) => handleFilterChange("fuelType", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Alege tipul" />
                   </SelectTrigger>
                   <SelectContent>
@@ -168,7 +169,7 @@ export default function Cars() {
 
               <Button
                 className="w-full"
-                onClick={() => setFilters({ page: 0, size: 9 })}
+                onClick={() => setFilters(defaultFilters)}
                 variant="outline"
               >
                 Resetează filtre
@@ -183,7 +184,7 @@ export default function Cars() {
             <div className="flex-1">
               <Input
                 placeholder="Caută după marcă, model..."
-                value={filters.search}
+                value={filters.search ?? ""}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
               />
             </div>
@@ -191,10 +192,10 @@ export default function Cars() {
               value={`${filters.sortBy}_${filters.direction}`}
               onValueChange={(value) => {
                 const [sortBy, direction] = value.split("_");
-                setFilters((prev: any) => ({
+                setFilters((prev) => ({
                   ...prev,
-                  sortBy: sortBy as "price" | "rating" | "year" | undefined,
-                  direction: direction as "asc" | "desc" | undefined,
+                  sortBy: sortBy as "price" | "rating" | "year",
+                  direction: direction as "asc" | "desc",
                 }));
               }}
             >
@@ -236,9 +237,7 @@ export default function Cars() {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="text-xs bg-secondary px-2 py-1 rounded-full">
-                      {car.year}
-                    </span>
+                    <span className="text-xs bg-secondary px-2 py-1 rounded-full">{car.year}</span>
                     <span className="text-xs bg-secondary px-2 py-1 rounded-full">
                       {car.transmission === "AUTOMATIC" ? "Automată" : "Manuală"}
                     </span>
@@ -270,14 +269,14 @@ export default function Cars() {
               <Button
                 variant="outline"
                 disabled={data.first}
-                onClick={() => handleFilterChange("page", (filters.page ?? 0) - 1)}
+                onClick={() => handleFilterChange("page", filters.page! - 1)}
               >
                 Anterior
               </Button>
               <Button
                 variant="outline"
                 disabled={data.last}
-                onClick={() => handleFilterChange("page", (filters.page ?? 0) + 1)}
+                onClick={() => handleFilterChange("page", filters.page! + 1)}
               >
                 Următor
               </Button>
