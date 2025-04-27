@@ -1,7 +1,7 @@
 import api from './api';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { CLIENT_ID, KEYCLOAK_URL } from '../utils/constants';
+import { CLIENT_ID, KEYCLOAK_URL, CLIENT_SECRET } from '../utils/constants';
 import { redirectToLogin } from '../utils/redirect';
 
 
@@ -30,6 +30,8 @@ const refreshAccessToken = async (): Promise<string> => {
     params.append('grant_type', 'refresh_token');
     params.append('client_id', CLIENT_ID);
     params.append('refresh_token', refreshToken);
+    params.append('client_secret', CLIENT_SECRET);
+
 
     const response = await axios.post(
       `${KEYCLOAK_URL}/protocol/openid-connect/token`,

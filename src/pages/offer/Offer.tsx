@@ -67,7 +67,7 @@ export default function Offer() {
       });
 
       setTimeout(() => {
-        navigate(`/profile/cars`);
+        navigate(`/cars`);
       }, 3000);
 
       setFormData({
