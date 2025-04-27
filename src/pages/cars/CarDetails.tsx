@@ -224,8 +224,8 @@ export default function CarDetails() {
                     { before: new Date() },
                     ...(disabledDays || []),
                   ]}
-                  className="rounded-md border w-full"
-                />
+                  className="w-full px-4 py-2 [--rdp-cell-size:3rem] sm:[--rdp-cell-size:3.5rem] md:[--rdp-cell-size:4rem]"
+                  />
               </div>
 
               <Button

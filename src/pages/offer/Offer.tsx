@@ -17,6 +17,8 @@ export default function Offer() {
     brand: "",
     model: "",
     year: "",
+    power: "",       // <-- adăugat
+    seats: "",      // <-- adăugat
     transmission: "",
     fuelType: "",
     price: "",
@@ -43,6 +45,8 @@ export default function Offer() {
         brand: formData.brand,
         model: formData.model,
         year: parseInt(formData.year),
+        power: parseInt(formData.power), // <-- adăugat
+        seats: parseInt(formData.seats), // <-- adăugat
         transmission: formData.transmission,
         fuelType: formData.fuelType,
         price: parseFloat(formData.price),
@@ -70,6 +74,8 @@ export default function Offer() {
         brand: "",
         model: "",
         year: "",
+        power: "",       // <-- adăugat
+        seats: "",      // <-- adăugat  
         transmission: "",
         fuelType: "",
         price: "",
@@ -188,6 +194,8 @@ export default function Offer() {
             <InputField id="brand" label="Marcă" value={formData.brand} onChange={handleChange} disabled={isSubmitting} />
             <InputField id="model" label="Model" value={formData.model} onChange={handleChange} disabled={isSubmitting} />
             <InputField id="year" label="An fabricație" value={formData.year} type="number" onChange={handleChange} disabled={isSubmitting} min={1900} max={new Date().getFullYear()} />
+            <InputField id="power" label="Putere (CP)" value={formData.power} type="number" onChange={handleChange} disabled={isSubmitting} />  {/* <-- Nou */}
+            <InputField id="seats" label="Număr locuri" value={formData.seats} type="number" onChange={handleChange} disabled={isSubmitting} />  {/* <-- Nou */}
             <SelectField label="Cutie de viteze" name="transmission" value={formData.transmission} onChange={handleSelectChange} options={["AUTOMATIC", "MANUAL"]} disabled={isSubmitting} />
             <SelectField label="Combustibil" name="fuelType" value={formData.fuelType} onChange={handleSelectChange} options={["GASOLINE", "DIESEL", "ELECTRIC", "HYBRID"]} disabled={isSubmitting} />
             <InputField id="price" label="Preț pe zi (RON)" value={formData.price} type="number" onChange={handleChange} disabled={isSubmitting} />

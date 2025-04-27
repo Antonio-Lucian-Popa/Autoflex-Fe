@@ -8,6 +8,7 @@
   height: 40px;
 }
 
+
 @media (max-width: 768px) {
     .swiper-button-prev,
     .swiper-button-next {
