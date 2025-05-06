@@ -2,10 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getUserBookings, getUserProfile } from "@/services/api";
+import { createStripeOnboardingLink, getOwnerStripeStatus, getUserBookings, getUserProfile } from "@/services/api";
 
 import { useQuery } from "@tanstack/react-query";
-import { Car, MapPin, Star } from "lucide-react";
+import { Car, Loader2, MapPin, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
@@ -17,16 +18,39 @@ export default function Profile() {
   const { data: userProfile, refetch: refetchUserProfile, isFetching: isFetchingProfile } = useQuery({
     queryKey: ["user-profile"],
     queryFn: getUserProfile,
-    enabled: false,
+    enabled: true,
   });
 
+  const [isConnectingStripe, setIsConnectingStripe] = useState(false);
+  const [stripeStatus, setStripeStatus] = useState<{ chargesEnabled: boolean, payoutsEnabled: boolean } | null>(null);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userProfile?.role === "OWNER" && userProfile.stripeAccountId) {
+      getOwnerStripeStatus(userProfile.id).then(setStripeStatus);
+    }
+  }, [userProfile]);
+
 
   const handleTabChange = (value: string) => {
     if (value === "settings") {
       refetchUserProfile(); // când intru pe setări fac request
     }
   };
+
+  const handleConnectStripe = async () => {
+    setIsConnectingStripe(true);
+    try {
+      const url = await createStripeOnboardingLink(userProfile.id);
+      window.location.href = url;
+    } catch (error) {
+      console.error(error);
+      alert("A apărut o eroare la conectarea contului Stripe");
+      setIsConnectingStripe(false);
+    }
+  };
+
 
   return (
     <div className="py-12">
@@ -132,12 +156,66 @@ export default function Profile() {
                 </div>
                 <div>
                   <label className="text-sm font-medium">Email</label>
-                  <p>{userProfile.email}</p>
+                  <p>{userProfile.email} {userProfile.stripeAccountId} </p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Telefon</label>
                   <p>{userProfile.phoneNumber || "Nespecificat"}</p>
                 </div>
+
+                {userProfile.role === "OWNER" && (
+                  <>
+                    {/* 1. NU are cont Stripe deloc */}
+                    {(!userProfile.stripeAccountId || userProfile.stripeAccountId === null) && (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold mb-2 text-red-500">Creează cont Stripe</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Nu ai încă un cont Stripe asociat. Creează unul pentru a putea primi plăți.
+                        </p>
+                        <Button onClick={handleConnectStripe} disabled={isConnectingStripe}>
+                          {isConnectingStripe ? (
+                            <div className="flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Se creează...
+                            </div>
+                          ) : (
+                            "Creează cont Stripe"
+                          )}
+                        </Button>
+                      </div>
+                    )}
+
+
+                    {/* 2. Are cont Stripe dar nu e complet activat */}
+                    {userProfile.stripeAccountId && (!stripeStatus?.chargesEnabled || !stripeStatus?.payoutsEnabled) && (
+                      <div className="space-y-4 text-orange-600">
+                        <h3 className="text-lg font-semibold">Cont Stripe incomplet ⚠️</h3>
+                        <p className="text-sm">
+                          Ai început configurarea contului Stripe, dar nu este complet activat. Te rugăm să finalizezi procesul.
+                        </p>
+                        <Button onClick={handleConnectStripe} disabled={isConnectingStripe}>
+                          {isConnectingStripe ? (
+                            <div className="flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              Se conectează...
+                            </div>
+                          ) : (
+                            "Finalizează configurarea Stripe"
+                          )}
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* 3. Totul e OK */}
+                    {userProfile.stripeAccountId && stripeStatus?.chargesEnabled && stripeStatus?.payoutsEnabled && (
+                      <div className="space-y-2 text-green-600">
+                        <h3 className="text-lg font-semibold">Cont Stripe activ ✅</h3>
+                        <p className="text-sm">Ești gata să primești plăți pentru închirieri.</p>
+                      </div>
+                    )}
+                  </>
+                )}
+
                 <Button className="mt-4">Editează profilul</Button>
               </div>
             </Card>

@@ -22,6 +22,12 @@ import Cars from "./pages/cars/Cars";
 import CarDetails from "./pages/cars/CarDetails";
 import Profile from "./pages/profile/Profile";
 import { BASE_PATH } from "./lib/constant";
+import CheckoutPage from "./pages/payment/CheckoutPage";
+import PaymentSuccessPage from "./pages/payment/PaymentSuccessPage";
+import PaymentFailedPage from "./pages/payment/PaymentFailedPage";
+import ReauthPage from "./pages/reauth/ReauthPage";
+import StripeOnboardingSuccess from "./pages/payment/StripeOnboardingSuccess";
+import StripeOnboardingRetry from "./pages/payment/StripeOnboardingRetry";
 
 function App() {
   const isAuthenticated = checkAuth(); // folosim auth.ts
@@ -43,6 +49,16 @@ function App() {
           <Route path="/cars" element={<Cars />} />
           <Route path="/cars/:id" element={<CarDetails />} />
           <Route path="/profile" element={<Profile />} />
+
+          <Route path="/checkout/:bookingId" element={<CheckoutPage />} />
+
+          <Route path="/reauth" element={<ReauthPage />} />
+
+          <Route path="/stripe/onboarding/success/:ownerId" element={<StripeOnboardingSuccess />} />
+          <Route path="/stripe/onboarding/retry/:ownerId" element={<StripeOnboardingRetry />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage />} />
+          <Route path="/payment-failed" element={<PaymentFailedPage />} />
+
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

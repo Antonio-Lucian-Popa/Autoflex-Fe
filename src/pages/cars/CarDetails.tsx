@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
@@ -26,6 +26,8 @@ export default function CarDetails() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isBooking, setIsBooking] = useState(false);
 
+  const navigate = useNavigate(); // adaugă asta sus în componentă
+
   const { data: car, isLoading: isLoadingCar } = useQuery({
     queryKey: ["car", id],
     queryFn: () => getCarById(id!),
@@ -48,13 +50,17 @@ export default function CarDetails() {
     }
     setIsBooking(true);
     try {
-      await createBooking({
+      const booking = await createBooking({
         carId: id!,
         startDate: format(dateRange.from, "yyyy-MM-dd"),
         endDate: format(dateRange.to, "yyyy-MM-dd"),
       });
-      toast.success("Rezervare creată", { description: "Rezervarea ta a fost înregistrată cu succes" });
-      setDateRange(undefined);
+  
+      toast.success("Rezervare creată", { description: "Redirecționare către plată..." });
+  
+      // ➡️ Redirect către Checkout
+      navigate(`/checkout/${booking.id}`);
+  
     } catch (error: any) {
       toast.error("Eroare", { description: error.response?.data?.message || "A apărut o eroare la rezervare" });
     } finally {
